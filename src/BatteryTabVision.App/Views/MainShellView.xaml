@@ -146,9 +146,6 @@
                         <Button x:Name="BtnMinimize"
                                 Width="46"
                                 Height="52"
-                                Content="─"
-                                FontSize="14"
-                                Foreground="White"
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Cursor="Hand"
@@ -163,8 +160,7 @@
                                                 <Border x:Name="Bd"
                                                         Background="{TemplateBinding Background}">
                                                     <ContentPresenter HorizontalAlignment="Center"
-                                                                      VerticalAlignment="Center"
-                                                                      TextElement.Foreground="White"/>
+                                                                      VerticalAlignment="Center"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver"
@@ -179,22 +175,19 @@
                                     </Setter>
                                 </Style>
                             </Button.Style>
+                            <TextBlock Text="─" Foreground="White" FontSize="14"/>
                         </Button>
 
                         <!-- 最大化/还原 -->
                         <Button x:Name="BtnMaximize"
                                 Width="46"
                                 Height="52"
-                                FontSize="13"
-                                Foreground="White"
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Cursor="Hand"
                                 Click="BtnMaximize_Click">
                             <Button.Style>
                                 <Style TargetType="Button">
-                                    <Setter Property="Content"
-                                            Value="□"/>
                                     <Setter Property="Background"
                                             Value="Transparent"/>
                                     <Setter Property="Template">
@@ -203,8 +196,7 @@
                                                 <Border x:Name="Bd"
                                                         Background="{TemplateBinding Background}">
                                                     <ContentPresenter HorizontalAlignment="Center"
-                                                                      VerticalAlignment="Center"
-                                                                      TextElement.Foreground="White"/>
+                                                                      VerticalAlignment="Center"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver"
@@ -217,25 +209,28 @@
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding WindowState,
-                                            RelativeSource={RelativeSource AncestorType=Window}}"
-                                                     Value="Maximized">
-                                            <Setter Property="Content"
-                                                    Value="❐"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
                                 </Style>
                             </Button.Style>
+                            <TextBlock FontSize="13" Foreground="White">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="□"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding WindowState,
+                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                                         Value="Maximized">
+                                                <Setter Property="Text" Value="❐"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Button>
 
                         <!-- 关闭 -->
                         <Button x:Name="BtnClose"
                                 Width="46"
                                 Height="52"
-                                Content="✕"
-                                FontSize="13"
-                                Foreground="White"
                                 Background="Transparent"
                                 BorderThickness="0"
                                 Cursor="Hand"
@@ -250,8 +245,7 @@
                                                 <Border x:Name="Bd"
                                                         Background="{TemplateBinding Background}">
                                                     <ContentPresenter HorizontalAlignment="Center"
-                                                                      VerticalAlignment="Center"
-                                                                      TextElement.Foreground="White"/>
+                                                                      VerticalAlignment="Center"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver"
@@ -266,6 +260,7 @@
                                     </Setter>
                                 </Style>
                             </Button.Style>
+                            <TextBlock Text="✕" Foreground="White" FontSize="13"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>
