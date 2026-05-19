@@ -10,7 +10,7 @@
       "WidthLowerLimit": 4.8,
       "WidthUpperLimit": 5.2,
       "Defect.BurrThresholdPx": 3.0,
-      "Defect.MinBurrClusterPoints": 5,
+      "Defect.MinBurrClusterPoints": 3,
       "Defect.EnableBurr": true,
       "Defect.MisalignmentThresholdMm": 1.0,
       "Defect.EnableMisalignment": true
@@ -25,7 +25,7 @@
       "WidthLowerLimit": 5.8,
       "WidthUpperLimit": 6.2,
       "Defect.BurrThresholdPx": 3.0,
-      "Defect.MinBurrClusterPoints": 5,
+      "Defect.MinBurrClusterPoints": 3,
       "Defect.EnableBurr": true,
       "Defect.MisalignmentThresholdMm": 1.0,
       "Defect.EnableMisalignment": true
@@ -40,7 +40,7 @@
       "WidthLowerLimit": 4.8,
       "WidthUpperLimit": 5.2,
       "Defect.BurrThresholdPx": 3.0,
-      "Defect.MinBurrClusterPoints": 5,
+      "Defect.MinBurrClusterPoints": 3,
       "Defect.EnableBurr": true,
       "Defect.MisalignmentThresholdMm": 1.0,
       "Defect.EnableMisalignment": true
