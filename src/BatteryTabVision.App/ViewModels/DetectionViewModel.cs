@@ -365,7 +365,7 @@ public sealed partial class DetectionViewModel : BindableBase
         {
             var records = await _repository.GetRecentAsync(50);
             foreach (var r in records)
-                History.Insert(0, DetectionHistoryItem.FromRecord(r));
+                History.Add(DetectionHistoryItem.FromRecord(r));
         }
         catch (Exception ex)
         {
