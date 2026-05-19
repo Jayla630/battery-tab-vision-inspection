@@ -12,30 +12,28 @@
 
         <!-- 导航按钮专用样式 -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="80"/>
+            <Setter Property="Width" Value="88"/>
             <Setter Property="Height" Value="36"/>
-            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Opacity" Value="0.65"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="6">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
-                                              TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                CornerRadius="6" Padding="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#2D3E52"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource NavHoverBrush}"/>
-                    <Setter Property="Opacity" Value="1"/>
-                </Trigger>
                 <DataTrigger Value="True">
                     <DataTrigger.Binding>
                         <MultiBinding Converter="{StaticResource EqualityToBooleanConverter}">
@@ -43,10 +41,7 @@
                             <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </DataTrigger.Binding>
-                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="Opacity" Value="1"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Background" Value="#0078D4"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -69,14 +64,18 @@
 
                 <!-- 右侧导航按钮 -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button Content="检测" 
-                            Style="{StaticResource NavButtonStyle}" 
+                    <Button Style="{StaticResource NavButtonStyle}" 
                             Tag="Detection"
-                            Command="{Binding NavigateToDetectionCommand}"/>
-                    <Button Content="参数配置" 
-                            Style="{StaticResource NavButtonStyle}" 
+                            Command="{Binding NavigateToDetectionCommand}">
+                        <TextBlock Text="检测" Foreground="White" Opacity="0.85"
+                                   FontSize="13" FontFamily="Segoe UI"/>
+                    </Button>
+                    <Button Style="{StaticResource NavButtonStyle}" 
                             Tag="ProfileConfig"
-                            Command="{Binding NavigateToProfileConfigCommand}"/>
+                            Command="{Binding NavigateToProfileConfigCommand}">
+                        <TextBlock Text="参数配置" Foreground="White" Opacity="0.85"
+                                   FontSize="13" FontFamily="Segoe UI"/>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
