@@ -27,13 +27,17 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="#2D3E52"/>
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
                 <DataTrigger Value="True">
                     <DataTrigger.Binding>
                         <MultiBinding Converter="{StaticResource EqualityToBooleanConverter}">
@@ -41,7 +45,7 @@
                             <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
                         </MultiBinding>
                     </DataTrigger.Binding>
-                    <Setter Property="Background" Value="#0078D4"/>
+                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
