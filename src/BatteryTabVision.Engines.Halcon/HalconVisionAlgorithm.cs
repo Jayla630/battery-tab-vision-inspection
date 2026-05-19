@@ -29,6 +29,8 @@ public sealed class HalconVisionAlgorithm : IVisionAlgorithm
     private double? _widthUpper;
     private bool _enableMisalignment = true;
     private double _misalignmentThresholdMm = 1.0;
+    private bool _enableBurrDetection = true;
+    private int _minBurrClusterPoints = 3;
 
     private bool _disposed;
 
@@ -53,6 +55,8 @@ public sealed class HalconVisionAlgorithm : IVisionAlgorithm
 
         _enableMisalignment = GetOptional<bool>(config, "Defect.EnableMisalignment") ?? true;
         _misalignmentThresholdMm = GetOptional<double>(config, "Defect.MisalignmentThresholdMm") ?? 1.0;
+        _enableBurrDetection = GetOptional<bool>(config, "Defect.EnableBurr") ?? true;
+        _minBurrClusterPoints = GetOptional<int>(config, "Defect.MinBurrClusterPoints") ?? 3;
 
         IsInitialized = true;
         return Task.CompletedTask;
@@ -135,6 +139,8 @@ public sealed class HalconVisionAlgorithm : IVisionAlgorithm
 
 
         var defects = new List<Defect>();
+        if (_enableBurrDetection)
+            defects.AddRange(DetectBurrsHalcon(tabRegion, 11, _minBurrClusterPoints * 5));
         if (_enableMisalignment)
         {
             hImage.GetImageSize(out HTuple imgW, out HTuple imgH);
@@ -301,6 +307,46 @@ public sealed class HalconVisionAlgorithm : IVisionAlgorithm
         if (lower is not null && value < lower.Value) return false;
         if (upper is not null && value > upper.Value) return false;
         return true;
+    }
+
+    private static IReadOnlyList<Defect> DetectBurrsHalcon(
+        HRegion tabRegion, int morphKernelSize, int minBurrAreaPx)
+    {
+        var defects = new List<Defect>();
+
+        using var cleanRegion = tabRegion.OpeningRectangle1(morphKernelSize, morphKernelSize);
+
+        using var burrRegion = tabRegion.Difference(cleanRegion);
+
+        using var components = burrRegion.Connection();
+        int count = (int)components.CountObj();
+
+        for (int i = 1; i <= count; i++)
+        {
+            using var component = components.SelectObj(i);
+            double area = component.Area;
+
+            if (area < minBurrAreaPx)
+                continue;
+
+            component.SmallestRectangle1(
+                out HTuple r1, out HTuple c1,
+                out HTuple r2, out HTuple c2);
+
+            defects.Add(new Defect
+            {
+                Type = "Burr",
+                Confidence = 1.0,
+                BoundingBox = new System.Drawing.Rectangle(
+                    (int)(double)c1,
+                    (int)(double)r1,
+                    (int)((double)c2 - (double)c1),
+                    (int)((double)r2 - (double)r1)),
+                Description = $"Area={area:F0}px²"
+            });
+        }
+
+        return defects;
     }
 
     private static T GetRequired<T>(AlgorithmConfig config, string key) where T : struct
