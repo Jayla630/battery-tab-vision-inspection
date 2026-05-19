@@ -451,3 +451,5 @@ TestResults/
 # Rider
 .idea/
 *.imlverification-output/
+
+docs/
