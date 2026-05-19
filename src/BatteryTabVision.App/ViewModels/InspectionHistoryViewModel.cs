@@ -60,9 +60,25 @@ public partial class InspectionHistoryViewModel : BindableBase
         set => SetProperty(ref _isLoading, value);
     }
 
+    private InspectionRecord? _selectedRecord;
+    public InspectionRecord? SelectedRecord
+    {
+        get => _selectedRecord;
+        set => SetProperty(ref _selectedRecord, value);
+    }
+
+    private bool _isDetailVisible;
+    public bool IsDetailVisible
+    {
+        get => _isDetailVisible;
+        set => SetProperty(ref _isDetailVisible, value);
+    }
+
     public DelegateCommand QueryCommand { get; }
     public DelegateCommand ResetCommand { get; }
     public DelegateCommand NavigateBackCommand { get; }
+    public DelegateCommand<InspectionRecord> ShowDetailCommand { get; }
+    public DelegateCommand CloseDetailCommand { get; }
 
     public InspectionHistoryViewModel(IInspectionRepository repository, IRegionManager regionManager)
     {
@@ -77,8 +93,17 @@ public partial class InspectionHistoryViewModel : BindableBase
             SelectedFilter = "All";
             await QueryAsync();
         });
-        NavigateBackCommand = new DelegateCommand(() => 
+        NavigateBackCommand = new DelegateCommand(() =>
             _regionManager.RequestNavigate("ContentRegion", "DetectionView"));
+        ShowDetailCommand = new DelegateCommand<InspectionRecord>(record =>
+        {
+            SelectedRecord = record;
+            IsDetailVisible = true;
+        });
+        CloseDetailCommand = new DelegateCommand(() =>
+        {
+            IsDetailVisible = false;
+        });
 
         QueryCommand.Execute();
     }

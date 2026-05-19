@@ -7,6 +7,8 @@
     <UserControl.Resources>
         <conv:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter"/>
         <conv:BoolToOkNgColorConverter x:Key="OkColor"/>
+        <conv:FileNameConverter x:Key="FileNameConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid Margin="16">
@@ -119,7 +121,8 @@
                       BorderThickness="0"
                       CanUserReorderColumns="False"
                       CanUserResizeRows="False"
-                      SelectionMode="Single">
+                      SelectionMode="Single"
+                      MouseDoubleClick="DataGrid_MouseDoubleClick">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="时间"
                             Width="140"
@@ -157,8 +160,212 @@
                     <DataGridTextColumn Header="SN"
                             Width="150"
                             Binding="{Binding SerialNo}"/>
+
+                    <!-- 标注图（只显示文件名，Tooltip 显示完整路径） -->
+                    <DataGridTemplateColumn Header="标注图" Width="200">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding AnnotatedImagePath,
+                                              Converter={StaticResource FileNameConverter}}"
+                                           TextTrimming="CharacterEllipsis"
+                                           ToolTip="{Binding AnnotatedImagePath}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- 算法参数（截断显示，Tooltip 显示完整 JSON） -->
+                    <DataGridTemplateColumn Header="算法参数" Width="220">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding AlgorithmParamsJson}"
+                                           TextTrimming="CharacterEllipsis"
+                                           ToolTip="{Binding AlgorithmParamsJson}"
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
+
+        <!-- 详情覆盖层 -->
+        <Grid Visibility="{Binding IsDetailVisible,
+                          Converter={StaticResource BoolToVisibilityConverter}}"
+              Background="#BB000000"
+              Grid.RowSpan="3">
+            <Border Background="White" CornerRadius="12"
+                    MaxWidth="980" MaxHeight="680"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Padding="24" Margin="40">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 标题栏 -->
+                    <DockPanel Grid.Row="0" Margin="0,0,0,16">
+                        <TextBlock Text="检测详情" FontSize="18" FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
+                        <Button DockPanel.Dock="Right" Content="✕" Width="32" Height="32"
+                                BorderThickness="0" Background="Transparent" Cursor="Hand"
+                                Command="{Binding CloseDetailCommand}"
+                                FontSize="16" Foreground="#6B7280"/>
+                    </DockPanel>
+
+                    <!-- 主体：左图右信息 -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="420"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- 左：标注图 -->
+                        <Border Grid.Column="0" Background="#111827" CornerRadius="8">
+                            <Image Source="{Binding SelectedRecord.AnnotatedImagePath}"
+                                   Stretch="Uniform" Margin="8"/>
+                        </Border>
+
+                        <!-- 右：详情字段 -->
+                        <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <!-- 基本信息 -->
+                                <TextBlock Text="基本信息" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="11" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="时间" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.Timestamp,
+                                                      StringFormat=yyyy-MM-dd HH:mm:ss}"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="产品型号" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding SelectedRecord.ProductModel}"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="引擎" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding SelectedRecord.EngineName}"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="结果" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.IsOk,
+                                                      Converter={StaticResource OkColor},
+                                                      ConverterParameter=text}"
+                                               Foreground="{Binding SelectedRecord.IsOk,
+                                                            Converter={StaticResource OkColor}}"
+                                               FontWeight="Bold"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="耗时" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.ElapsedMs,
+                                                      StringFormat={}{0}ms}"/>
+                                </Grid>
+
+                                <!-- 尺寸测量 -->
+                                <TextBlock Text="尺寸测量" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="11" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="极耳长度" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.TabLengthMm,
+                                                      StringFormat={}{0:F2} mm}"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="极耳宽度" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.TabWidthMm,
+                                                      StringFormat={}{0:F2} mm}"/>
+                                </Grid>
+
+                                <!-- 缺陷信息 -->
+                                <TextBlock Text="缺陷信息" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="11" Margin="0,0,0,8"/>
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="缺陷数量" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.DefectCount}"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="缺陷类型" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding SelectedRecord.DefectTypesJson}"
+                                               TextWrapping="Wrap"/>
+                                </Grid>
+
+                                <!-- 算法参数快照 -->
+                                <TextBlock Text="算法参数快照" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="11" Margin="0,0,0,8"/>
+                                <Border Background="#F8FAFC" CornerRadius="6" Padding="12">
+                                    <TextBlock Text="{Binding SelectedRecord.AlgorithmParamsJson}"
+                                               TextWrapping="Wrap" FontSize="11"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               FontFamily="Consolas"/>
+                                </Border>
+
+                                <!-- 图像路径 -->
+                                <TextBlock Text="标注图路径" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="11" Margin="0,16,0,8"/>
+                                <TextBlock Text="{Binding SelectedRecord.AnnotatedImagePath}"
+                                           TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- 底部关闭按钮 -->
+                    <Button Grid.Row="2" Content="关 闭"
+                            Command="{Binding CloseDetailCommand}"
+                            Style="{StaticResource BaseButtonStyle}"
+                            Width="100" HorizontalAlignment="Right"
+                            Margin="0,16,0,0"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
