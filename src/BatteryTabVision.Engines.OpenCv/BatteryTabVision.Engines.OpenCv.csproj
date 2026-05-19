@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>12</LangVersion>
+    <!-- Suppress NETSDK1206: ubuntu.22.04-x64 runtime assets are not auto-resolved on .NET 8.
+         libOpenCvSharpExtern.so is built from source and installed to /usr/local/lib/ on Linux.
+         See native/build-extern-linux.sh for the reproducible build procedure. -->
+    <NoWarn>NETSDK1206</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BatteryTabVision.Core\BatteryTabVision.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Main managed wrapper — version matches the built extern (4.6.0.20220608) -->
+    <PackageReference Include="OpenCvSharp4" Version="4.6.0.20220608" />
+    <!-- Windows native runtime: provides OpenCvSharpExtern.dll on Windows CI / developer machines -->
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.6.0.20220608" />
+    <!-- Linux native runtime: ubuntu.22.04-x64 snapshot is referenced for Windows users.
+         On Linux (Ubuntu 24.04) the .so is built from source and installed system-wide.
+         See native/build-extern-linux.sh. -->
+    <PackageReference Include="OpenCvSharp4.runtime.ubuntu.22.04-x64" Version="4.6.0-SNAPSHOT" />
+    <PackageReference Include="Prism.Core" Version="9.0.537" />
+  </ItemGroup>
+
+</Project>
