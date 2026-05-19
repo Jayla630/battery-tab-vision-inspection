@@ -65,6 +65,7 @@ public sealed partial class DetectionViewModel : BindableBase
         InitializeThrottleTimer();
 
         LoadSampleCommand = new DelegateCommand(async () => await LoadSampleAsync(), () => !IsBusy);
+        LoadBurrSampleCommand = new DelegateCommand(async () => await LoadBurrSampleAsync(), () => !IsBusy);
         RunDetectCommand = new DelegateCommand(async () => await RunDetectAsync(),
             () => !IsBusy && !string.IsNullOrEmpty(CurrentImagePath));
 
@@ -147,6 +148,7 @@ public sealed partial class DetectionViewModel : BindableBase
     }
 
     public DelegateCommand LoadSampleCommand { get; }
+    public DelegateCommand LoadBurrSampleCommand { get; }
     public DelegateCommand RunDetectCommand { get; }
 
 
@@ -237,6 +239,29 @@ public sealed partial class DetectionViewModel : BindableBase
         finally { IsBusy = false; }
     }
 
+    private Task LoadBurrSampleAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            var (path, _, _) = SyntheticTabImageGenerator.GenerateWithDefect(
+                defect: SyntheticDefect.Burr,
+                burrCount: 3,
+                burrHeightPx: 15,
+                burrWidthPx: 10,
+                noiseStdDev: 5.0);
+            CurrentImagePath = path;
+            CurrentImageWidth = 800;
+            CurrentImageHeight = 600;
+            AnnotatedImagePath = null;
+            RaisePropertyChanged(nameof(DisplayedImagePath));
+            StatusText = $"Loaded: {Path.GetFileName(path)}";
+            ScheduleDetect();
+            return Task.CompletedTask;
+        }
+        finally { IsBusy = false; }
+    }
+
     private async Task RunDetectAsync()
     {
         if (string.IsNullOrEmpty(CurrentImagePath)) return;
@@ -279,6 +304,7 @@ public sealed partial class DetectionViewModel : BindableBase
     private void RaiseCanExecuteForAllCommands()
     {
         LoadSampleCommand.RaiseCanExecuteChanged();
+        LoadBurrSampleCommand.RaiseCanExecuteChanged();
         RunDetectCommand.RaiseCanExecuteChanged();
     }
 
