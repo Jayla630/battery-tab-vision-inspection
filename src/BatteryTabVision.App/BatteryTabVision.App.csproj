@@ -31,6 +31,8 @@
     <None Remove="**\*.xaml" />
     <Compile Remove="**\Converters\*.cs" />
     <Compile Remove="**\ViewModels\DetectionViewModel.Windows.cs" />
+    <Compile Remove="**\ViewModels\ProfileConfigViewModel.Windows.cs" />
+    <Compile Remove="**\ViewModels\MainShellViewModel.Windows.cs" />
   </ItemGroup>
 
   <!-- On Linux/net8.0-windows: exclude XAML code-behind and WPF-specific ViewModel partial -->
@@ -39,6 +41,8 @@
     <None Remove="**\*.xaml" />
     <Compile Remove="**\Converters\*.cs" />
     <Compile Remove="**\ViewModels\DetectionViewModel.Windows.cs" />
+    <Compile Remove="**\ViewModels\ProfileConfigViewModel.Windows.cs" />
+    <Compile Remove="**\ViewModels\MainShellViewModel.Windows.cs" />
   </ItemGroup>
 
   <ItemGroup>

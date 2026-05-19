@@ -247,9 +247,9 @@ public sealed partial class DetectionViewModel : BindableBase
             var (path, _, _) = SyntheticTabImageGenerator.GenerateWithDefect(
                 defect: SyntheticDefect.Burr,
                 burrCount: 3,
-                burrHeightPx: 15,
+                burrHeightPx: 25,
                 burrWidthPx: 10,
-                noiseStdDev: 5.0);
+                noiseStdDev: 2.0);
             CurrentImagePath = path;
             CurrentImageWidth = 800;
             CurrentImageHeight = 600;

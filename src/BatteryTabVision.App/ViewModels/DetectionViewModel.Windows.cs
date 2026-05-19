@@ -1,10 +1,22 @@
 using System.Windows.Data;
 using System.Windows.Threading;
+using Prism.Navigation.Regions;
 
 namespace BatteryTabVision.App.ViewModels;
 
-public sealed partial class DetectionViewModel
+public sealed partial class DetectionViewModel : INavigationAware
 {
+    public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+
+    public void OnNavigatedFrom(NavigationContext navigationContext) { }
+
+    public void OnNavigatedTo(NavigationContext navigationContext)
+    {
+        if (string.IsNullOrEmpty(SelectedModel)) return;
+        LoadProfileIntoParams(SelectedModel);
+        ScheduleDetect();
+    }
+
     private DispatcherTimer? _throttleTimer;
 
     partial void InitializeThrottleTimer()
