@@ -33,6 +33,7 @@
     <Compile Remove="**\ViewModels\DetectionViewModel.Windows.cs" />
     <Compile Remove="**\ViewModels\ProfileConfigViewModel.Windows.cs" />
     <Compile Remove="**\ViewModels\MainShellViewModel.Windows.cs" />
+    <Compile Remove="**\ViewModels\InspectionHistoryViewModel.Windows.cs" />
   </ItemGroup>
 
   <!-- On Linux/net8.0-windows: exclude XAML code-behind and WPF-specific ViewModel partial -->
@@ -43,6 +44,7 @@
     <Compile Remove="**\ViewModels\DetectionViewModel.Windows.cs" />
     <Compile Remove="**\ViewModels\ProfileConfigViewModel.Windows.cs" />
     <Compile Remove="**\ViewModels\MainShellViewModel.Windows.cs" />
+    <Compile Remove="**\ViewModels\InspectionHistoryViewModel.Windows.cs" />
   </ItemGroup>
 
   <ItemGroup>

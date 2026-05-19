@@ -43,6 +43,7 @@ public partial class App : PrismApplication
 
         containerRegistry.RegisterForNavigation<DetectionView, ViewModels.DetectionViewModel>();
         containerRegistry.RegisterForNavigation<ProfileConfigView, ViewModels.ProfileConfigViewModel>();
+        containerRegistry.RegisterForNavigation<InspectionHistoryView, ViewModels.InspectionHistoryViewModel>();
     }
 
     protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

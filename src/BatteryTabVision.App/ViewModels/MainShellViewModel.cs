@@ -18,6 +18,7 @@ public partial class MainShellViewModel : BindableBase
 
     public DelegateCommand NavigateToDetectionCommand { get; }
     public DelegateCommand NavigateToProfileConfigCommand { get; }
+    public DelegateCommand NavigateToHistoryCommand { get; }
 
     public MainShellViewModel(IRegionManager regionManager)
     {
@@ -25,6 +26,7 @@ public partial class MainShellViewModel : BindableBase
         
         NavigateToDetectionCommand = new DelegateCommand(() => Navigate("Detection"));
         NavigateToProfileConfigCommand = new DelegateCommand(() => Navigate("ProfileConfig"));
+        NavigateToHistoryCommand = new DelegateCommand(() => Navigate("InspectionHistory"));
     }
 
     private void Navigate(string viewName)

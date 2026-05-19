@@ -7,4 +7,13 @@ public interface IInspectionRepository
 {
     Task SaveAsync(InspectionRecord record, CancellationToken ct = default);
     Task<IReadOnlyList<InspectionRecord>> GetRecentAsync(int count = 50, CancellationToken ct = default);
+    
+    Task<IReadOnlyList<InspectionRecord>> QueryAsync(
+        bool? isOk = null,
+        DateTime? from = null,
+        DateTime? to = null,
+        string? productModel = null,
+        CancellationToken ct = default);
+
+    Task<int> CountAsync(CancellationToken ct = default);
 }

@@ -31,6 +31,29 @@ public sealed class InspectionRepository : IInspectionRepository
         return entities.Select(ToRecord).ToList();
     }
 
+    public async Task<IReadOnlyList<InspectionRecord>> QueryAsync(
+        bool? isOk = null, DateTime? from = null, DateTime? to = null,
+        string? productModel = null, CancellationToken ct = default)
+    {
+        var query = _fsql.Select<InspectionRecordEntity>();
+        if (isOk.HasValue)
+            query = query.Where(x => x.IsOk == isOk.Value);
+        if (from.HasValue)
+            query = query.Where(x => x.Timestamp >= from.Value);
+        if (to.HasValue)
+            query = query.Where(x => x.Timestamp <= to.Value.AddDays(1));
+        if (!string.IsNullOrEmpty(productModel))
+            query = query.Where(x => x.ProductModel == productModel);
+
+        var list = await query
+            .OrderByDescending(x => x.Id)
+            .ToListAsync(ct);
+        return list.Select(ToRecord).ToList();
+    }
+
+    public async Task<int> CountAsync(CancellationToken ct = default)
+        => (int)await _fsql.Select<InspectionRecordEntity>().CountAsync(ct);
+
     private static InspectionRecordEntity ToEntity(InspectionRecord r) => new()
     {
         Timestamp = r.Timestamp,
