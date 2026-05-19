@@ -16,4 +16,7 @@ public interface IProfileConfigService
 
     /// <summary>删除指定产品型号，并持久化到 JSON 文件。</summary>
     void DeleteProfile(string productModel);
+
+    /// <summary>按指定顺序重排产品型号列表，并持久化到 JSON 文件。</summary>
+    void ReorderProfiles(IList<string> orderedModels);
 }

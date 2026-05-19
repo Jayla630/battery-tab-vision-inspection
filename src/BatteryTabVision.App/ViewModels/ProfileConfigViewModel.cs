@@ -18,6 +18,10 @@ public sealed partial class ProfileConfigViewModel : BindableBase
         DiscardCommand = new DelegateCommand(Discard, () => HasUnsavedChanges);
         AddProfileCommand = new DelegateCommand(AddProfile);
         DeleteProfileCommand = new DelegateCommand(DeleteProfile, () => SelectedProfileName != null);
+        MoveUpCommand   = new DelegateCommand(MoveUp,   () => CanMoveUp())
+            .ObservesProperty(() => SelectedProfileName);
+        MoveDownCommand = new DelegateCommand(MoveDown, () => CanMoveDown())
+            .ObservesProperty(() => SelectedProfileName);
 
         RefreshProfileNames();
     }
@@ -152,6 +156,8 @@ public sealed partial class ProfileConfigViewModel : BindableBase
     public DelegateCommand DiscardCommand { get; }
     public DelegateCommand AddProfileCommand { get; }
     public DelegateCommand DeleteProfileCommand { get; }
+    public DelegateCommand MoveUpCommand { get; }
+    public DelegateCommand MoveDownCommand { get; }
 
     private void MarkChanged()
     {
@@ -203,6 +209,39 @@ public sealed partial class ProfileConfigViewModel : BindableBase
         SelectedProfileName = null;
         HasUnsavedChanges = false;
         StatusMessage = $"已删除型号: {name}";
+    }
+
+    private bool CanMoveUp()
+    {
+        if (string.IsNullOrEmpty(SelectedProfileName)) return false;
+        return ProfileNames.IndexOf(SelectedProfileName) > 0;
+    }
+
+    private bool CanMoveDown()
+    {
+        if (string.IsNullOrEmpty(SelectedProfileName)) return false;
+        int idx = ProfileNames.IndexOf(SelectedProfileName);
+        return idx >= 0 && idx < ProfileNames.Count - 1;
+    }
+
+    private void MoveUp()
+    {
+        int idx = ProfileNames.IndexOf(SelectedProfileName!);
+        if (idx <= 0) return;
+        ProfileNames.Move(idx, idx - 1);
+        _configService.ReorderProfiles(ProfileNames);
+        MoveUpCommand.RaiseCanExecuteChanged();
+        MoveDownCommand.RaiseCanExecuteChanged();
+    }
+
+    private void MoveDown()
+    {
+        int idx = ProfileNames.IndexOf(SelectedProfileName!);
+        if (idx < 0 || idx >= ProfileNames.Count - 1) return;
+        ProfileNames.Move(idx, idx + 1);
+        _configService.ReorderProfiles(ProfileNames);
+        MoveUpCommand.RaiseCanExecuteChanged();
+        MoveDownCommand.RaiseCanExecuteChanged();
     }
 
     public void RefreshProfileNames()

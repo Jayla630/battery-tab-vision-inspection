@@ -97,6 +97,18 @@ public sealed class ProfileConfigService : IProfileConfigService
         }
     }
 
+    public void ReorderProfiles(IList<string> orderedModels)
+    {
+        var reordered = orderedModels
+            .Select(name => _profiles.FirstOrDefault(p => p.ProductModel == name))
+            .Where(p => p != null)
+            .Cast<AlgorithmProfileEntry>()
+            .ToList();
+        _profiles.Clear();
+        _profiles.AddRange(reordered);
+        SaveToFile();
+    }
+
     private void SaveToFile()
     {
         var config = new AlgorithmProfileConfig { Profiles = _profiles };
