@@ -7,7 +7,7 @@
     <UserControl.Resources>
         <conv:StatusToColorConverter x:Key="StatusToColor"/>
     </UserControl.Resources>
-    
+
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,10 +15,14 @@
         </Grid.RowDefinitions>
 
         <!-- 顶部栏 -->
-        <Grid Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="产品型号参数管理" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
-            <Button Content="返回检测" 
-                    Command="{Binding NavigateBackCommand}" 
+        <Grid Grid.Row="0"
+                Margin="0,0,0,16">
+            <TextBlock Text="产品型号参数管理"
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+            <Button Content="返回检测"
+                    Command="{Binding NavigateBackCommand}"
                     HorizontalAlignment="Right"
                     Style="{StaticResource BaseButtonStyle}"
                     Width="100"/>
@@ -32,34 +36,53 @@
             </Grid.ColumnDefinitions>
 
             <!-- 左侧：列表卡片 -->
-            <Border Grid.Column="0" Background="White" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Margin="0,0,16,0" Padding="12">
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="8"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    Margin="0,0,16,0"
+                    Padding="12">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
-                    <ListBox ItemsSource="{Binding ProfileNames}" 
-                             SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}" 
+
+                    <ListBox ItemsSource="{Binding ProfileNames}"
+                             SelectedItem="{Binding SelectedProfileName, Mode=TwoWay}"
                              BorderThickness="0">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
-                                <Setter Property="Padding" Value="12,8"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding"
+                                        Value="12,8"/>
+                                <Setter Property="Background"
+                                        Value="Transparent"/>
+                                <Setter Property="BorderThickness"
+                                        Value="0"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
-                                            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="4" Margin="0,2">
+                                            <Border x:Name="Bd"
+                                                    Background="{TemplateBinding Background}"
+                                                    CornerRadius="4"
+                                                    Margin="0,2">
                                                 <ContentPresenter/>
                                             </Border>
                                             <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="Bd" Property="Background" Value="#F3F4F6"/>
+                                                <Trigger Property="IsMouseOver"
+                                                        Value="True">
+                                                    <Setter TargetName="Bd"
+                                                            Property="Background"
+                                                            Value="#F3F4F6"/>
                                                 </Trigger>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentBrush}"/>
-                                                    <Setter Property="Foreground" Value="White"/>
+                                                <Trigger Property="IsSelected"
+                                                        Value="True">
+                                                    <Setter TargetName="Bd"
+                                                            Property="Background"
+                                                            Value="{StaticResource AccentBrush}"/>
+                                                    <Setter Property="Foreground"
+                                                            Value="White"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -69,25 +92,47 @@
                         </ListBox.ItemContainerStyle>
                     </ListBox>
 
-                    <StackPanel Grid.Row="1" Margin="0,12,0,0">
-                        <Button Content="+ 新增型号" Command="{Binding AddProfileCommand}" Style="{StaticResource BaseButtonStyle}" Margin="0,0,0,8"/>
-                        <Button Content="- 删除当前" Command="{Binding DeleteProfileCommand}" Style="{StaticResource BaseButtonStyle}"/>
+                    <StackPanel Grid.Row="1"
+                            Margin="0,12,0,0">
+                        <Button Content="+ 新增型号"
+                                Command="{Binding AddProfileCommand}"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Margin="0,0,0,8"/>
+                        <Button Content="- 删除当前"
+                                Command="{Binding DeleteProfileCommand}"
+                                Style="{StaticResource BaseButtonStyle}"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- 右侧：表单卡片 -->
-            <Border Grid.Column="1" Background="White" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Padding="20">
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="8"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    Padding="20">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <TextBlock Text="基本信息" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,16"/>
-                        
-                        <TextBlock Text="型号名称" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                        <TextBox Text="{Binding EditingModelName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+                        <TextBlock Text="基本信息"
+                                FontWeight="SemiBold"
+                                FontSize="15"
+                                Margin="0,0,0,16"/>
+
+                        <TextBlock Text="型号名称"
+                                Foreground="{StaticResource TextSecondaryBrush}"
+                                FontSize="11"
+                                FontWeight="SemiBold"
+                                Margin="0,0,0,4"/>
+                        <TextBox Text="{Binding EditingModelName, UpdateSourceTrigger=LostFocus}"
+                                Margin="0,0,0,16"/>
 
                         <Separator Margin="0,8,0,20"/>
-                        
-                        <TextBlock Text="算法参数" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,16"/>
+
+                        <TextBlock Text="算法参数"
+                                FontWeight="SemiBold"
+                                FontSize="15"
+                                Margin="0,0,0,16"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -95,89 +140,159 @@
                                 <ColumnDefinition Width="16"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="二值化阈值" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding BinaryThreshold, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
 
-                                <TextBlock Text="最小轮廓面积" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding MinContourArea, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="二值化阈值"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding BinaryThreshold, UpdateSourceTrigger=LostFocus}"
+                                        Margin="0,0,0,12"/>
+
+                                <TextBlock Text="最小轮廓面积"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding MinContourArea, UpdateSourceTrigger=LostFocus}"
+                                        Margin="0,0,0,12"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="像素/毫米标定 (PixelsPerMm)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding PixelsPerMm, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12"/>
+                                <TextBlock Text="像素/毫米标定 (PixelsPerMm)"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding PixelsPerMm, UpdateSourceTrigger=LostFocus}"
+                                        Margin="0,0,0,12"/>
                             </StackPanel>
                         </Grid>
 
-                        <TextBlock Text="尺寸公差" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,4,0,8"/>
+                        <TextBlock Text="尺寸公差"
+                                Foreground="{StaticResource TextSecondaryBrush}"
+                                FontSize="11"
+                                FontWeight="SemiBold"
+                                Margin="0,4,0,8"/>
                         <UniformGrid Columns="2">
                             <StackPanel Margin="0,0,8,12">
-                                <TextBlock Text="长度下限" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
-                                <TextBox Text="{Binding LengthLowerLimit, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="长度下限"
+                                        FontSize="10"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding LengthLowerLimit, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                             <StackPanel Margin="8,0,0,12">
-                                <TextBlock Text="长度上限" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
-                                <TextBox Text="{Binding LengthUpperLimit, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="长度上限"
+                                        FontSize="10"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding LengthUpperLimit, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,8,0">
-                                <TextBlock Text="宽度下限" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
-                                <TextBox Text="{Binding WidthLowerLimit, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="宽度下限"
+                                        FontSize="10"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding WidthLowerLimit, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                             <StackPanel Margin="8,0,0,0">
-                                <TextBlock Text="宽度上限" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
-                                <TextBox Text="{Binding WidthUpperLimit, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="宽度上限"
+                                        FontSize="10"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding WidthUpperLimit, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                         </UniformGrid>
 
                         <Separator Margin="0,24,0,20"/>
 
-                        <TextBlock Text="缺陷检测" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,16"/>
-                        
-                        <CheckBox Content="启用毛刺检测" IsChecked="{Binding EnableBurr}" Margin="0,0,0,12"/>
-                        <Grid Margin="24,0,0,12" IsEnabled="{Binding EnableBurr}">
+                        <TextBlock Text="缺陷检测"
+                                FontWeight="SemiBold"
+                                FontSize="15"
+                                Margin="0,0,0,16"/>
+
+                        <CheckBox Content="启用毛刺检测"
+                                IsChecked="{Binding EnableBurr}"
+                                Margin="0,0,0,12"/>
+                        <Grid Margin="24,0,0,12"
+                                IsEnabled="{Binding EnableBurr}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="16"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="毛刺阈值 (像素)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding BurrThresholdPx, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="毛刺阈值 (像素)"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding BurrThresholdPx, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="最小簇点数" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                                <TextBox Text="{Binding MinBurrClusterPoints, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="最小簇点数"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        FontSize="11"
+                                        FontWeight="SemiBold"
+                                        Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding MinBurrClusterPoints, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
                         </Grid>
 
-                        <CheckBox Content="启用错位检测" IsChecked="{Binding EnableMisalignment}" Margin="0,0,0,12"/>
-                        <StackPanel Margin="24,0,0,0" IsEnabled="{Binding EnableMisalignment}">
-                            <TextBlock Text="错位阈值 (mm)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                            <TextBox Text="{Binding MisalignmentThresholdMm, UpdateSourceTrigger=PropertyChanged}" Width="150" HorizontalAlignment="Left"/>
+                        <CheckBox Content="启用错位检测"
+                                IsChecked="{Binding EnableMisalignment}"
+                                Margin="0,0,0,12"/>
+                        <StackPanel Margin="24,0,0,0"
+                                IsEnabled="{Binding EnableMisalignment}">
+                            <TextBlock Text="错位阈值 (mm)"
+                                    Foreground="{StaticResource TextSecondaryBrush}"
+                                    FontSize="11"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding MisalignmentThresholdMm, UpdateSourceTrigger=LostFocus}"
+                                    Width="150"
+                                    HorizontalAlignment="Left"/>
                         </StackPanel>
 
-                        <TextBlock Text="{Binding StatusMessage}" 
+                        <TextBlock Text="{Binding StatusMessage}"
                                    Foreground="{Binding StatusMessage, Converter={StaticResource StatusToColor}}"
-                                   Margin="0,20,0,0" 
+                                   Margin="0,20,0,0"
                                    FontWeight="SemiBold">
                             <TextBlock.Style>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                <Style TargetType="TextBlock"
+                                        BasedOn="{StaticResource {x:Type TextBlock}}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding StatusMessage}" Value="">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        <DataTrigger Binding="{Binding StatusMessage}"
+                                                Value="">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding StatusMessage}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        <DataTrigger Binding="{Binding StatusMessage}"
+                                                Value="{x:Null}">
+                                            <Setter Property="Visibility"
+                                                    Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,32,0,0">
-                            <Button Content="取消修改" Command="{Binding DiscardCommand}" IsEnabled="{Binding HasUnsavedChanges}" Style="{StaticResource BaseButtonStyle}" Width="100"/>
-                            <Button Content="保存" Command="{Binding SaveCommand}" IsEnabled="{Binding HasUnsavedChanges}" Style="{StaticResource PrimaryButtonStyle}" Width="100" Margin="12,0,0,0"/>
+                        <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="0,32,0,0">
+                            <Button Content="取消修改"
+                                    Command="{Binding DiscardCommand}"
+                                    IsEnabled="{Binding HasUnsavedChanges}"
+                                    Style="{StaticResource BaseButtonStyle}"
+                                    Width="100"/>
+                            <Button Content="保存"
+                                    Command="{Binding SaveCommand}"
+                                    IsEnabled="{Binding HasUnsavedChanges}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Width="100"
+                                    Margin="12,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
