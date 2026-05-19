@@ -8,176 +8,167 @@
         <conv:InverseBooleanConverter x:Key="InverseBool"/>
         <conv:BoolToOkNgColorConverter x:Key="OkColor"/>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="280"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- 图像区 + ROI 覆盖层 -->
-        <Grid Grid.Row="0"
-              Grid.Column="0"
-              Margin="8"
-              Background="#222">
-            <Image Source="{Binding DisplayedImagePath}"
-                   Stretch="Uniform"
-                   x:Name="ImageElement"/>
-            <Canvas Background="Transparent"
-                    x:Name="RoiCanvas"
-                    MouseDown="RoiCanvas_MouseDown"
-                    MouseMove="RoiCanvas_MouseMove"
-                    MouseUp="RoiCanvas_MouseUp">
-                <Rectangle x:Name="RoiRect"
-                           Stroke="Yellow"
-                           StrokeThickness="2"
-                           StrokeDashArray="4,2"
-                           Fill="#33FFFF00"/>
-            </Canvas>
-        </Grid>
-
-        <!-- 参数面板 + 历史列表 -->
-        <Grid Grid.Row="0"
-              Grid.Column="1"
-              Margin="8,8,11,8">
+    
+    <Grid Background="#111827">
+        <Grid Margin="4">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"
-                        MinHeight="120"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="290"/>
+            </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Row="0"
-                          VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <TextBlock Text="检测参数"
-                               FontWeight="Bold"
-                               Margin="0,0,0,8"/>
+            <!-- 图像区 (左侧) -->
+            <Border Grid.Row="0" Grid.Column="0" 
+                    Background="#111827" 
+                    CornerRadius="8" 
+                    Margin="0,0,4,0">
+                <Grid>
+                    <Image Source="{Binding DisplayedImagePath}"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           x:Name="ImageElement"/>
+                <Canvas Background="Transparent"
+                        x:Name="RoiCanvas"
+                        MouseDown="RoiCanvas_MouseDown"
+                        MouseMove="RoiCanvas_MouseMove"
+                        MouseUp="RoiCanvas_MouseUp">
+                    <Rectangle x:Name="RoiRect"
+                               Stroke="Yellow"
+                               StrokeThickness="2"
+                               StrokeDashArray="4,2"
+                               Fill="#33FFFF00"/>
+                </Canvas>
+            </Grid>
+        </Border>
 
-                    <TextBlock Text="视觉引擎"
-                               Margin="0,0,0,4"/>
-                    <ComboBox ItemsSource="{Binding AvailableEngines}"
-                              SelectedItem="{Binding SelectedEngine, Mode=TwoWay}"
-                              Margin="0,0,0,12"/>
+        <!-- 参数区 (右侧) -->
+        <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- 卡片一：配置 -->
+                <Border Background="White" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Padding="12" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock Text="基础配置" FontWeight="SemiBold" Margin="0,0,0,12"/>
+                        <TextBlock Text="视觉引擎" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <ComboBox ItemsSource="{Binding AvailableEngines}"
+                                  SelectedItem="{Binding SelectedEngine, Mode=TwoWay}"
+                                  Margin="0,0,0,12"/>
 
-                    <TextBlock Text="产品型号"
-                               Margin="0,0,0,4"/>
-                    <ComboBox ItemsSource="{Binding AvailableModels}"
-                              SelectedItem="{Binding SelectedModel, Mode=TwoWay}"
-                              Margin="0,0,0,12"/>
-                    <Separator Margin="0,0,0,8"/>
+                        <TextBlock Text="产品型号" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <ComboBox ItemsSource="{Binding AvailableModels}"
+                                  SelectedItem="{Binding SelectedModel, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
 
-                    <TextBlock Text="二值化阈值"/>
-                    <Slider Value="{Binding BinaryThreshold, Mode=TwoWay}"
-                            Minimum="0"
-                            Maximum="255"
-                            TickFrequency="10"/>
-                    <TextBlock Text="{Binding BinaryThreshold}"
-                               HorizontalAlignment="Right"/>
+                <!-- 卡片二：算法参数 -->
+                <Border Background="White" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Padding="12" Margin="0,0,0,8">
+                    <StackPanel>
+                        <TextBlock Text="算法参数" FontWeight="SemiBold" Margin="0,0,0,12"/>
+                        
+                        <TextBlock Text="二值化阈值" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <Grid>
+                            <Slider Value="{Binding BinaryThreshold, Mode=TwoWay}" Minimum="0" Maximum="255" TickFrequency="10" VerticalAlignment="Center" Margin="0,0,40,0"/>
+                            <TextBlock Text="{Binding BinaryThreshold}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
 
-                    <TextBlock Text="最小轮廓面积"
-                               Margin="0,8,0,0"/>
-                    <Slider Value="{Binding MinContourArea, Mode=TwoWay}"
-                            Minimum="100"
-                            Maximum="10000"
-                            TickFrequency="500"/>
-                    <TextBlock Text="{Binding MinContourArea, StringFormat=F0}"
-                               HorizontalAlignment="Right"/>
+                        <TextBlock Text="最小轮廓面积" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+                        <Grid>
+                            <Slider Value="{Binding MinContourArea, Mode=TwoWay}" Minimum="100" Maximum="10000" TickFrequency="500" VerticalAlignment="Center" Margin="0,0,40,0"/>
+                            <TextBlock Text="{Binding MinContourArea, StringFormat=F0}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
 
-                    <TextBlock Text="像素/毫米标定"
-                               Margin="0,8,0,0"/>
-                    <Slider Value="{Binding PixelsPerMm, Mode=TwoWay}"
-                            Minimum="5"
-                            Maximum="50"
-                            TickFrequency="1"/>
-                    <TextBlock Text="{Binding PixelsPerMm, StringFormat=F2}"
-                               HorizontalAlignment="Right"/>
+                        <TextBlock Text="像素/毫米标定" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,8,0,0"/>
+                        <Grid>
+                            <Slider Value="{Binding PixelsPerMm, Mode=TwoWay}" Minimum="5" Maximum="50" TickFrequency="1" VerticalAlignment="Center" Margin="0,0,40,0"/>
+                            <TextBlock Text="{Binding PixelsPerMm, StringFormat=F2}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
 
-                    <Separator Margin="0,8"/>
-                    <TextBlock Text="公差范围 (mm)"
-                               FontWeight="Bold"/>
-                    <UniformGrid Columns="2"
-                                 Margin="0,4">
-                        <TextBlock Text="长度下限:"
-                                   VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding LengthLowerLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="长度上限:"
-                                   VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding LengthUpperLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="宽度下限:"
-                                   VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding WidthLowerLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
-                        <TextBlock Text="宽度上限:"
-                                   VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding WidthUpperLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
-                    </UniformGrid>
-
-                    <Separator Margin="0,8"/>
-                    <Button Content="加载样本图"
-                            Command="{Binding LoadSampleCommand}"
-                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
-                            Height="36"
-                            Margin="0,0,0,8"/>
-                    <Button Content="加载缺陷样本"
-                            Command="{Binding LoadBurrSampleCommand}"
-                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
-                            Height="36"
-                            Margin="0,0,0,8"/>
-                    <Button Content="运行检测"
-                            Command="{Binding RunDetectCommand}"
-                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
-                            Height="36"/>
-                </StackPanel>
-            </ScrollViewer>
-
-            <!-- 检测历史 ListBox 始终可见 -->
-            <GroupBox Grid.Row="1"
-                      Header="检测历史"
-                      Margin="0,8,0,0">
-                <ListBox ItemsSource="{Binding History}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Stretch"/>
-                            <Setter Property="Padding"
-                                    Value="4,2"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <!-- 第一行：时间戳 + OK/NG -->
-                                <DockPanel>
-                                    <TextBlock DockPanel.Dock="Left"
-                                               Text="{Binding TimestampDisplay}"
-                                               Width="54"
-                                            FontSize="11"
-                                               Foreground="#888888"/>
-                                    <TextBlock Text="{Binding IsOk, Converter={StaticResource OkColor}, ConverterParameter=text}"
-                                               Foreground="{Binding IsOk, Converter={StaticResource OkColor}}"
-                                               FontWeight="Bold"
-                                            FontSize="11"/>
-                                </DockPanel>
-                                <!-- 第二行：尺寸 + 耗时（Summary 可能含缺陷信息，允许换行） -->
-                                <TextBlock Text="{Binding Summary}"
-                                           FontSize="10.5"
-                                           Foreground="#444444"
-                                           TextWrapping="Wrap"
-                                           Margin="0,1,0,0"/>
+                        <TextBlock Text="公差范围 (mm)" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,12,0,4" FontWeight="SemiBold"/>
+                        <UniformGrid Columns="2">
+                            <StackPanel Margin="0,0,4,4">
+                                <TextBlock Text="长度下限" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBox Text="{Binding LengthLowerLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
                             </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </GroupBox>
-        </Grid>
+                            <StackPanel Margin="4,0,0,4">
+                                <TextBlock Text="长度上限" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBox Text="{Binding LengthUpperLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,4,4,0">
+                                <TextBlock Text="宽度下限" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBox Text="{Binding WidthLowerLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
+                            </StackPanel>
+                            <StackPanel Margin="4,4,0,0">
+                                <TextBlock Text="宽度上限" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBox Text="{Binding WidthUpperLimit, StringFormat=F2, UpdateSourceTrigger=LostFocus}"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
 
-        <!-- 状态栏跨两列 -->
-        <StatusBar Grid.Row="1"
-                   Grid.ColumnSpan="2">
-            <StatusBarItem Content="{Binding StatusText}"/>
-        </StatusBar>
+                <!-- 卡片三：操作区 -->
+                <Border Background="White" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Padding="12" Margin="0,0,0,8">
+                    <StackPanel>
+                        <Button Content="加载样本图" 
+                                Command="{Binding LoadSampleCommand}" 
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Margin="0,0,0,8"/>
+                        <Button Content="加载缺陷样本" 
+                                Command="{Binding LoadBurrSampleCommand}" 
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Margin="0,0,0,8"/>
+                        <Button Content="运行检测" 
+                                Command="{Binding RunDetectCommand}" 
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
+                                Style="{StaticResource PrimaryButtonStyle}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 检测历史 -->
+                <Border Background="White" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Padding="12" Height="250">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="检测历史" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                        <ListBox Grid.Row="1" ItemsSource="{Binding History}" BorderThickness="0" Padding="0">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Padding" Value="0,4"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                    <Setter Property="BorderBrush" Value="#F3F4F6"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Left" Text="{Binding TimestampDisplay}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            <TextBlock Text="{Binding IsOk, Converter={StaticResource OkColor}, ConverterParameter=text}"
+                                                       Foreground="{Binding IsOk, Converter={StaticResource OkColor}}"
+                                                       FontWeight="Bold" FontSize="11" HorizontalAlignment="Right"/>
+                                        </DockPanel>
+                                        <TextBlock Text="{Binding Summary}" FontSize="11" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 底部状态栏 -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Background="#1E2A38" CornerRadius="4" Margin="0,16,0,0" Padding="12,8">
+            <TextBlock Text="{Binding StatusText}" Foreground="White" VerticalAlignment="Center"/>
+        </Border>
     </Grid>
+</Grid>
 </UserControl>

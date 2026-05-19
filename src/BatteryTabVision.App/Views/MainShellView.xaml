@@ -2,9 +2,87 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:converters="clr-namespace:BatteryTabVision.App.Converters"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="锂电池极耳视觉检测系统" Width="1200" Height="800">
+        Title="锂电极耳视觉检测系统" Width="1200" Height="800"
+        Background="{StaticResource ContentBgBrush}">
+    
+    <Window.Resources>
+        <converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter"/>
+
+        <!-- 导航按钮专用样式 -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="0.65"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource NavHoverBrush}"/>
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+                <DataTrigger Value="True">
+                    <DataTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource EqualityToBooleanConverter}">
+                            <Binding Path="CurrentPage" />
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                        </MultiBinding>
+                    </DataTrigger.Binding>
+                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="52"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 顶部导航栏 -->
+        <Border Grid.Row="0" Background="{StaticResource NavBgBrush}">
+            <Grid Margin="16,0">
+                <!-- 左侧标题 -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Text="⚡" FontSize="18" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="锂电极耳视觉检测" FontSize="14" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- 右侧导航按钮 -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="检测" 
+                            Style="{StaticResource NavButtonStyle}" 
+                            Tag="Detection"
+                            Command="{Binding NavigateToDetectionCommand}"/>
+                    <Button Content="参数配置" 
+                            Style="{StaticResource NavButtonStyle}" 
+                            Tag="ProfileConfig"
+                            Command="{Binding NavigateToProfileConfigCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 内容区 -->
+        <ContentControl Grid.Row="1"
+                        prism:RegionManager.RegionName="ContentRegion"/>
     </Grid>
 </Window>
