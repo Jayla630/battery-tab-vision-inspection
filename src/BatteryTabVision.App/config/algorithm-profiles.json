@@ -1,0 +1,49 @@
+{
+  "Profiles": [
+    {
+      "ProductModel": "TabA-12x5",
+      "BinaryThreshold": 128,
+      "MinContourArea": 1000,
+      "PixelsPerMm": 20.0,
+      "LengthLowerLimit": 11.8,
+      "LengthUpperLimit": 12.2,
+      "WidthLowerLimit": 4.8,
+      "WidthUpperLimit": 5.2,
+      "Defect.BurrThresholdPx": 3.0,
+      "Defect.MinBurrClusterPoints": 5,
+      "Defect.EnableBurr": true,
+      "Defect.MisalignmentThresholdMm": 1.0,
+      "Defect.EnableMisalignment": true
+    },
+    {
+      "ProductModel": "TabB-15x6",
+      "BinaryThreshold": 110,
+      "MinContourArea": 1200,
+      "PixelsPerMm": 20.0,
+      "LengthLowerLimit": 14.7,
+      "LengthUpperLimit": 15.3,
+      "WidthLowerLimit": 5.8,
+      "WidthUpperLimit": 6.2,
+      "Defect.BurrThresholdPx": 3.0,
+      "Defect.MinBurrClusterPoints": 5,
+      "Defect.EnableBurr": true,
+      "Defect.MisalignmentThresholdMm": 1.0,
+      "Defect.EnableMisalignment": true
+    },
+    {
+      "ProductModel": "Default-20x5",
+      "BinaryThreshold": 128,
+      "MinContourArea": 1000,
+      "PixelsPerMm": 20.0,
+      "LengthLowerLimit": 19.5,
+      "LengthUpperLimit": 20.5,
+      "WidthLowerLimit": 4.8,
+      "WidthUpperLimit": 5.2,
+      "Defect.BurrThresholdPx": 3.0,
+      "Defect.MinBurrClusterPoints": 5,
+      "Defect.EnableBurr": true,
+      "Defect.MisalignmentThresholdMm": 1.0,
+      "Defect.EnableMisalignment": true
+    }
+  ]
+}
