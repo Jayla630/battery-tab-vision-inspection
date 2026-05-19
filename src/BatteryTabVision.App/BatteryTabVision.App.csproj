@@ -13,7 +13,7 @@
 
   <!-- net8.0-windows: 完整的 WPF 应用程序 -->
   <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows'">
-    <!-- 关键：在 Windows 上开发时开启 WPF 支持，解决本地 XAML 报红。
+    <!-- 关键：在 Windows 上开发时开启 WPF 支持，解决本地 XAML报红。
          在 Linux CI 上，通过 Condition 避开对 WindowsDesktop.App 的强制引用包检查。 -->
     <UseWPF Condition="$([MSBuild]::IsOSPlatform('Windows'))">true</UseWPF>
     <OutputType Condition="$([MSBuild]::IsOSPlatform('Windows'))">WinExe</OutputType>

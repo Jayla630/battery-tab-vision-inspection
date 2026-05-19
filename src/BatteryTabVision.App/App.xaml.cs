@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using BatteryTabVision.App.Infrastructure;
 using BatteryTabVision.App.Views;
 using BatteryTabVision.Core.Abstractions;
@@ -26,7 +26,6 @@ public partial class App : PrismApplication
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-
         containerRegistry.RegisterSingleton<IVisionAlgorithmFactory, VisionAlgorithmFactory>();
 
 
