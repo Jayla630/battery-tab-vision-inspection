@@ -4,48 +4,72 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:converters="clr-namespace:BatteryTabVision.App.Converters"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="锂电极耳视觉检测系统" Width="1200" Height="800"
+        WindowStyle="None"
+        WindowState="Maximized"
+        ResizeMode="CanResizeWithGrip"
+        Title=""
+        Width="1200"
+        Height="800"
         Background="{StaticResource ContentBgBrush}">
-    
+
     <Window.Resources>
         <converters:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter"/>
 
         <!-- 导航按钮专用样式 -->
-        <Style x:Key="NavButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="88"/>
-            <Setter Property="Height" Value="36"/>
-            <Setter Property="Margin" Value="4,0,0,0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
+        <Style x:Key="NavButtonStyle"
+               TargetType="Button">
+            <Setter Property="Width"
+                    Value="88"/>
+            <Setter Property="Height"
+                    Value="36"/>
+            <Setter Property="Margin"
+                    Value="4,0,0,0"/>
+            <Setter Property="Background"
+                    Value="Transparent"/>
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
-                                CornerRadius="6" Padding="0">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                              TextElement.Foreground="White"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="Bd"
+                                        Property="Opacity"
+                                        Value="0.85"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
-                    <Setter Property="Opacity" Value="1"/>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="Opacity"
+                            Value="1"/>
                 </Trigger>
                 <DataTrigger Value="True">
                     <DataTrigger.Binding>
                         <MultiBinding Converter="{StaticResource EqualityToBooleanConverter}">
-                            <Binding Path="CurrentPage" />
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                            <Binding Path="CurrentPage"/>
+                            <Binding Path="Tag"
+                                     RelativeSource="{RelativeSource Self}"/>
                         </MultiBinding>
                     </DataTrigger.Binding>
-                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="Background"
+                            Value="{StaticResource AccentBrush}"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -58,28 +82,192 @@
         </Grid.RowDefinitions>
 
         <!-- 顶部导航栏 -->
-        <Border Grid.Row="0" Background="{StaticResource NavBgBrush}">
-            <Grid Margin="16,0">
+        <Border Grid.Row="0"
+                Background="{StaticResource NavBgBrush}"
+                MouseLeftButtonDown="NavBar_MouseLeftButtonDown">
+            <Grid>
                 <!-- 左侧标题 -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <TextBlock Text="⚡" FontSize="18" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="锂电极耳视觉检测" FontSize="14" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="16,0">
+                    <TextBlock Text="⚡"
+                               FontSize="18"
+                               Foreground="White"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="锂电极耳视觉检测"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="White"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- 右侧导航按钮 -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button Style="{StaticResource NavButtonStyle}" 
-                            Tag="Detection"
-                            Command="{Binding NavigateToDetectionCommand}">
-                        <TextBlock Text="检测" Foreground="White" Opacity="0.85"
-                                   FontSize="13" FontFamily="Segoe UI"/>
-                    </Button>
-                    <Button Style="{StaticResource NavButtonStyle}" 
-                            Tag="ProfileConfig"
-                            Command="{Binding NavigateToProfileConfigCommand}">
-                        <TextBlock Text="参数配置" Foreground="White" Opacity="0.85"
-                                   FontSize="13" FontFamily="Segoe UI"/>
-                    </Button>
+                <!-- 右侧按钮区域 -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <!-- 导航按钮 -->
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <Button Style="{StaticResource NavButtonStyle}"
+                                Tag="Detection"
+                                Command="{Binding NavigateToDetectionCommand}">
+                            <TextBlock Text="检测"
+                                       Foreground="White"
+                                       Opacity="0.85"
+                                       FontSize="13"
+                                       FontFamily="Segoe UI"/>
+                        </Button>
+                        <Button Style="{StaticResource NavButtonStyle}"
+                                Tag="InspectionHistory"
+                                Command="{Binding NavigateToHistoryCommand}">
+                            <TextBlock Text="检测历史"
+                                       Foreground="White"
+                                       Opacity="0.85"
+                                       FontSize="13"
+                                       FontFamily="Segoe UI"/>
+                        </Button>
+                        <Button Style="{StaticResource NavButtonStyle}"
+                                Tag="ProfileConfig"
+                                Command="{Binding NavigateToProfileConfigCommand}">
+                            <TextBlock Text="参数配置"
+                                       Foreground="White"
+                                       Opacity="0.85"
+                                       FontSize="13"
+                                       FontFamily="Segoe UI"/>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- 窗口控制按钮 -->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="8,0,0,0">
+                        <!-- 最小化 -->
+                        <Button x:Name="BtnMinimize"
+                                Width="46"
+                                Height="52"
+                                Content="─"
+                                FontSize="14"
+                                Foreground="White"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="BtnMinimize_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background"
+                                            Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="Bd"
+                                                        Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"
+                                                                      TextElement.Foreground="White"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                                        <Setter TargetName="Bd"
+                                                                Property="Background"
+                                                                Value="#2D3E52"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- 最大化/还原 -->
+                        <Button x:Name="BtnMaximize"
+                                Width="46"
+                                Height="52"
+                                FontSize="13"
+                                Foreground="White"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="BtnMaximize_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Content"
+                                            Value="□"/>
+                                    <Setter Property="Background"
+                                            Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="Bd"
+                                                        Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"
+                                                                      TextElement.Foreground="White"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                                        <Setter TargetName="Bd"
+                                                                Property="Background"
+                                                                Value="#2D3E52"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding WindowState,
+                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                                                     Value="Maximized">
+                                            <Setter Property="Content"
+                                                    Value="❐"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <!-- 关闭 -->
+                        <Button x:Name="BtnClose"
+                                Width="46"
+                                Height="52"
+                                Content="✕"
+                                FontSize="13"
+                                Foreground="White"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Click="BtnClose_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background"
+                                            Value="Transparent"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="Bd"
+                                                        Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"
+                                                                      TextElement.Foreground="White"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                                        <Setter TargetName="Bd"
+                                                                Property="Background"
+                                                                Value="#C42B1C"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>
