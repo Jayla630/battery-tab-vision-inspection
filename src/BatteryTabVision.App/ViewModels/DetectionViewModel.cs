@@ -66,6 +66,7 @@ public sealed partial class DetectionViewModel : BindableBase
 
         LoadSampleCommand = new DelegateCommand(async () => await LoadSampleAsync(), () => !IsBusy);
         LoadBurrSampleCommand = new DelegateCommand(async () => await LoadBurrSampleAsync(), () => !IsBusy);
+        LoadMisalignmentSampleCommand = new DelegateCommand(async () => await LoadMisalignmentSampleAsync(), () => !IsBusy);
         RunDetectCommand = new DelegateCommand(async () => await RunDetectAsync(),
             () => !IsBusy && !string.IsNullOrEmpty(CurrentImagePath));
 
@@ -149,6 +150,7 @@ public sealed partial class DetectionViewModel : BindableBase
 
     public DelegateCommand LoadSampleCommand { get; }
     public DelegateCommand LoadBurrSampleCommand { get; }
+    public DelegateCommand LoadMisalignmentSampleCommand { get; }
     public DelegateCommand RunDetectCommand { get; }
 
 
@@ -262,6 +264,27 @@ public sealed partial class DetectionViewModel : BindableBase
         finally { IsBusy = false; }
     }
 
+    private Task LoadMisalignmentSampleAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            var (path, _, _) = SyntheticTabImageGenerator.GenerateWithDefect(
+                defect: SyntheticDefect.Misalignment,
+                misalignmentPx: 60,
+                noiseStdDev: 2.0);
+            CurrentImagePath = path;
+            CurrentImageWidth = 800;
+            CurrentImageHeight = 600;
+            AnnotatedImagePath = null;
+            RaisePropertyChanged(nameof(DisplayedImagePath));
+            StatusText = $"Loaded: {Path.GetFileName(path)}";
+            ScheduleDetect();
+            return Task.CompletedTask;
+        }
+        finally { IsBusy = false; }
+    }
+
     private async Task RunDetectAsync()
     {
         if (string.IsNullOrEmpty(CurrentImagePath)) return;
@@ -305,6 +328,7 @@ public sealed partial class DetectionViewModel : BindableBase
     {
         LoadSampleCommand.RaiseCanExecuteChanged();
         LoadBurrSampleCommand.RaiseCanExecuteChanged();
+        LoadMisalignmentSampleCommand.RaiseCanExecuteChanged();
         RunDetectCommand.RaiseCanExecuteChanged();
     }
 
@@ -409,10 +433,12 @@ public sealed partial class DetectionViewModel : BindableBase
         string defectPart = "";
         if (r.Defects.Count > 0)
         {
-            var types = r.Defects
+            var summaries = r.Defects
                 .GroupBy(d => d.Type)
-                .Select(g => $"{g.Key}×{g.Count()}");
-            defectPart = $" | Defects: {string.Join(", ", types)}";
+                .Select(g => g.Key == "Misalignment" 
+                    ? $"Misalignment: {g.First().Description?.Split(' ')[0] ?? "Unknown"}" 
+                    : $"{g.Key}×{g.Count()}");
+            defectPart = $" | {string.Join(", ", summaries)}";
         }
 
         return $"{status} | {measurements}{defectPart} | {r.ElapsedMs}ms | Engine: {r.EngineName}";

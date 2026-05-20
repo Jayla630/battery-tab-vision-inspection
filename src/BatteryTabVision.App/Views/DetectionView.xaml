@@ -121,6 +121,11 @@
                                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
                                 Style="{StaticResource BaseButtonStyle}"
                                 Margin="0,0,0,8"/>
+                        <Button Content="加载错位样本"
+                                Command="{Binding LoadMisalignmentSampleCommand}"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Margin="0,0,0,8"/>
                         <Button Content="运行检测" 
                                 Command="{Binding RunDetectCommand}" 
                                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"
